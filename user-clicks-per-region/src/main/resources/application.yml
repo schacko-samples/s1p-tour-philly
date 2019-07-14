@@ -1,0 +1,12 @@
+spring.application.name: user-clicks-per-region
+spring.cloud.stream.bindings.clicks_in_0:
+  destination: user-clicks
+spring.cloud.stream.bindings.clicks_in_1:
+  destination: user-regions
+spring.cloud.stream.bindings.clicks_out:
+  destination: clics-per-region
+spring.cloud.stream.kafka.streams.binder:
+  configuration:
+    default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+    default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+    commit.interval.ms: 1000

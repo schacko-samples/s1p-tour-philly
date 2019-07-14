@@ -1,0 +1,46 @@
+== Demo repository used for my talk at S1P tour Philly
+
+https://springonetour.io/2019/philadelphia
+
+
+There are 3 contrived applications in this repository.
+
+1. A source application that generates sensor data for an imaginary sensor system.
+2. A processor application that enriches the sensor data with more information.
+3. A Kafka Streams processor to calculates clicks per region.
+
+=== Running the apps:
+
+Go to the root of the repository.
+
+All applications require Kafka to be available. There is a convenient docker-compose script provided.
+
+`docker-compose up -d`
+
+Start the processor app (Run it from an IDE or CLI).
+
+On two separate terminal windows:
+
+`docker exec -it s1p-tour-philly /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic sensor-data`
+
+`docker exec -it s1p-tour-philly /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic enriched-sensor-data`
+
+Start the source app. This will start generate sensor data which will be processed by the processor we started above.
+
+Watch the console where you are listening from the topics.
+
+Now lets run the Kafka Streams app:
+
+Run the user-clicks-per-region application (CLI or IDE). If running from the IDE, make sure to run the main class `UserClicksPerRegionApplication`.
+
+`docker exec -it s1p-tour-philly /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic clics-per-region
+ --key-deserializer org.apache.kafka.common.serialization.StringDeserializer
+ --value-deserializer org.apache.kafka.common.serialization.LongDeserializer --property print.key=true --property key.separator="-"`
+
+Then run the standalons `UserDataProducer.
+
+Watch the console where we listen on the topics.
+
+Note: The producer simulates the behavior of users moving from one region to another.
+
+`docker-compose down`
