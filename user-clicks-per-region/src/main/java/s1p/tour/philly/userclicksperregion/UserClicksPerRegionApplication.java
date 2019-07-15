@@ -4,6 +4,7 @@ import java.util.function.BiFunction;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
+import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.Joined;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
@@ -27,7 +28,7 @@ public class UserClicksPerRegionApplication {
 						Joined.with(Serdes.String(), Serdes.Long(), null))
 				.map((user, regionWithClicks) -> new KeyValue<>(regionWithClicks.getRegion(),
 						regionWithClicks.getClicks()))
-				.groupByKey(Serialized.with(Serdes.String(), Serdes.Long()))
+				.groupByKey(Grouped.with(Serdes.String(), Serdes.Long()))
 				.reduce(Long::sum)
 				.toStream());
 	}
