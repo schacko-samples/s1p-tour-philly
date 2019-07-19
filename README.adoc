@@ -17,7 +17,9 @@ All applications require Kafka to be available. There is a convenient docker-com
 
 `docker-compose up -d`
 
-Start the processor app (Run it from an IDE or CLI).
+`./mvnw clean package`
+
+Start the processor app (Run it from an IDE or CLI). [`java -jar sensor-processor/target/sensor-processor-0.0.1-SNAPSHOT.jar`]
 
 On two separate terminal windows:
 
@@ -27,17 +29,19 @@ On two separate terminal windows:
 
 Start the source app. This will start generate sensor data which will be processed by the processor we started above.
 
+`java -jar sensor-source/target/sensor-source-0.0.1-SNAPSHOT.jar`
+
 Watch the console where you are listening from the topics.
 
 Now lets run the Kafka Streams app:
 
 Run the user-clicks-per-region application (CLI or IDE). If running from the IDE, make sure to run the main class `UserClicksPerRegionApplication`.
 
-`docker exec -it s1p-tour-philly /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic clics-per-region
- --key-deserializer org.apache.kafka.common.serialization.StringDeserializer
- --value-deserializer org.apache.kafka.common.serialization.LongDeserializer --property print.key=true --property key.separator="-"`
+`java -jar user-clicks-per-region/target/user-clicks-per-region-0.0.1-SNAPSHOT.jar`
 
-Then run the standalons `UserDataProducer.
+`docker exec -it s1p-tour-philly /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server 127.0.0.1:9092 --topic clics-per-region --key-deserializer org.apache.kafka.common.serialization.StringDeserializer --value-deserializer org.apache.kafka.common.serialization.LongDeserializer --property print.key=true --property key.separator="-"`
+
+Then run the standalons `UserDataProducer`.
 
 Watch the console where we listen on the topics.
 
